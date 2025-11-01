@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{graphicx} % Required for inserting images
+\usepackage[swedish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{ddd}
+\author{Gustav Jörgensen}
+\date{September 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Metod}
+Vi ville undersöka vid vilka värden på $p=\tfrac{c}{n}$ som den största komponenten i $G(n,p)$ innehåller minst $0.25n$ noder. 
+Som bakgrund kan nämnas att det finns ett välkänt fasövergångsbeteende i slumpgrafer: när $c \leq 1$ består grafen mest av små komponenter, men när $c > 1$ uppträder en jättekomponent som omfattar en positiv andel av noderna.
+
+För att generera slumpgraferna använde vi Batagelj--Brandes-algoritmen,
+som gör det möjligt att skapa $G(n,p)$ i tid $O(n+m)$, där $m$ är antalet
+kanter \cite{BatageljBrandes2005}. För varje graf beräknade vi den största komponentens storlek med BFS, och upprepade experimenten för flera värden på $c$ kring den kritiska punkten.
+
+\section{Resultat}
+Simuleringarna visar tydligt fasövergången: för $c$ strax över 1 börjar den största komponenten snabbt växa. 
+Vid värden kring $c \approx 1.15$ observerade vi att den största komponenten i genomsnitt omfattar ungefär $25\%$ av alla noder. 
+För större $c$ fortsätter andelen att växa. Resultaten från simuleringarna överensstämmer väl med de teoretiska förväntningarna.
+
+\begin{center}
+\includegraphics[width=0.75\linewidth]{output.png}
+\end{center}
+
+\section{Diskussion}
+Våra simuleringar bekräftar den teoretiska bilden av slumpgrafernas fasövergång: 
+för små $c$ saknas en jättekomponent, men när $c$ ökar förbi ett tröskelvärde uppträder en komponent som växer linjärt med $n$. 
+Vi kan konstatera att runt $c \approx 1.15$ blir denna komponent ungefär en fjärdedel av hela grafen. 
+Små avvikelser mellan simulering och teori kan förklaras av ändliga storlekseffekter, men trenden är tydlig även för måttligt stora $n$.
+
+\newpage.
+
+\section{Metod}
+Vi undersökte hur antalet trianglar i $G(n,p)$ fördelar sig när $p=\tfrac{1}{n}$. 
+Teorin säger att i denna skala blir trianglar sällsynta och nästan oberoende, vilket leder till att antalet trianglar $T$ konvergerar mot en Poisson-fördelning med parameter $\lambda=\tfrac{1}{6}$.
+
+För att verifiera detta genomförde vi simuleringar i Python. Vi genererade slumpgrafer med $n=6000$ och $p=1/n$ med hjälp av Batagelj--Brandes-algoritmen. För varje graf räknade vi antalet trianglar med en effektiv metod baserad på grad-orientering. Vi upprepade försöken många gånger för att få en tillförlitlig fördelning.
+
+\section{Resultat}
+Resultaten från simuleringarna visar att antalet trianglar oftast är 0 eller 1, och mer sällan 2 eller fler. Histogrammet från våra försök stämmer väl överens med sannolikhetsmassfunktionen för en Poissonfördelning med $\lambda=\tfrac{1}{6}$.
+
+\begin{center}
+\includegraphics[width=0.75\linewidth]{output3.png}
+\end{center}
+
+Det empiriska medelvärdet och variansen för antalet trianglar låg mycket nära $\tfrac{1}{6}$, vilket stärker slutsatsen att fördelningen är Poissonliknande.
+
+\section{Diskussion}
+Simuleringarna bekräftar den teoretiska förutsägelsen att antalet trianglar i $G(n,1/n)$ konvergerar mot en Poissonfördelning med parameter $\lambda=\tfrac{1}{6}$. Detta illustrerar ett generellt fenomen i slumpgrafer: när sannolikheten väljs i en kritisk skala (här $1/n$) blir små strukturer som trianglar sällsynta men följer en enkel slumpmodell.
+
+Små avvikelser i frekvensen av 2 eller fler trianglar kan tillskrivas ändliga storlekseffekter och slumpvariation i simuleringarna. För större $n$ skulle dessa skillnader minska ytterligare. Våra resultat visar att redan vid $n=6000$ syns Poissonbeteendet tydligt.
+
+
+\bibliographystyle{plain} % eller alpha, abbrv, ieeetr, etc.
+\bibliography{referenser}
+
+
+\end{document}
